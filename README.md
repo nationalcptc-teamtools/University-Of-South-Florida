@@ -1,0 +1,4 @@
+
+```
+git clone | bash
+```

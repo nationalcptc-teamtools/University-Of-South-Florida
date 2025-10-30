@@ -18,18 +18,9 @@ debug_confirm() {
 
 echo "Installing Active Directory tools..."
 
-# Get script directory for copying tools
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-# Get the actual user who ran sudo, not root
-ACTUAL_USER=${SUDO_USER:-$USER}
-if [ "$ACTUAL_USER" = "root" ]; then
-    echo "Error: Please run this script with sudo, not as root directly"
-    exit 1
-fi
 
 # Install base dependencies and tools available via apt
-apt-get update
+sudo apt-get update
 APT_PACKAGES=(
     smbclient
     python3-impacket
@@ -41,14 +32,9 @@ APT_PACKAGES=(
 
 if debug_confirm "Install APT packages: ${APT_PACKAGES[*]}"; then
     echo "Installing apt packages..."
-    DEBIAN_FRONTEND=noninteractive apt-get install -y "${APT_PACKAGES[@]}" || true
+    DEBIAN_FRONTEND=noninteractive sudo apt-get install -y "${APT_PACKAGES[@]}" || true
 fi
 
-# Ensure pipx is available and in PATH
-if ! command -v pipx >/dev/null 2>&1; then
-    python3 -m pip install --user pipx
-    python3 -m pipx ensurepath
-fi
 
 # Install Python packages via pipx
 PIPX_PACKAGES=(

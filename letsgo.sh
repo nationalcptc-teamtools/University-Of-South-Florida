@@ -93,6 +93,8 @@ if [[ -n "$go_page" ]]; then
 fi
 mkdir -p "${USER_HOME}/go"
 
+chown -R "$ACTUAL_USER:$ACTUAL_USER" "${USER_HOME}/go"
+
 # preserve original zshrc PATH additions
 ZSHRC="${USER_HOME}/.zshrc"
 grep -Fq 'export PATH=~/.local/bin:$PATH' "$ZSHRC" 2>/dev/null || {

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/zsh
 
 set -euo pipefail
 
@@ -37,15 +37,15 @@ APT_PACKAGES=(
     python3-pip
     python3-venv
     vim
-    tmux
+t install -y --no-insta    tmux
     flameshot
 )
 
 apt-get install -y --no-install-recommends "${APT_PACKAGES[@]}" || true
 
 # Ask about seclists specifically
-read -r -p "Do you want to install SecLists? This package is large (~4.7GB). [y/N]: " install_seclists
-if [[ "${install_seclists,,}" =~ ^(y|yes)$ ]]; then
+read -r "install_seclists?Do you want to install SecLists? This package is large (~4.7GB). [y/N]: "
+if [[ "${(L)install_seclists}" =~ ^(y|yes)$ ]]; then
     apt-get install -y --no-install-recommends seclists || true
 fi
 
@@ -68,7 +68,7 @@ if [[ -f "./tools/ultimate-nmap-parser.sh" ]]; then
     chmod +x /usr/local/bin/ultimate-nmap-parser
 fi
 
-# Install docker 
+# Install docker
 mkdir -p /etc/apt/keyrings
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian bookworm stable" > /etc/apt/sources.list.d/docker.list
 curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
@@ -114,5 +114,11 @@ if [[ -f "$ZSHRC" ]]; then
     # shellcheck disable=SC1090
     source "$ZSHRC" || true
 fi
+
+source ~/.zshrc
+
+#Add go path to sudoers
+sed '/secure_path/ s|"$|:/usr/local/go/bin"|' /etc/sudoers | sudo EDITOR='tee' visudo -c -f - > /dev/null && \
+sed -i.bak '/secure_path/ s|"$|:/usr/local/go/bin"|' /etc/sudoers
 
 echo "All set :)"

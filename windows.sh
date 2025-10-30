@@ -16,19 +16,6 @@ debug_confirm() {
 }
 # ========== DEBUG SECTION END ============
 
-# Function to install Go binaries
-install_go_binary() {
-    local pkg="$1"
-    local bin="${2:-$(basename "$pkg")}"
-    if ! command -v "$bin" >/dev/null 2>&1; then
-        echo "Installing $bin via Go..."
-        if ! command -v go >/dev/null 2>&1; then
-            apt-get install -y golang-go
-        fi
-        GOBIN=/usr/local/bin go install "${pkg}@latest" || true
-    fi
-}
-
 echo "Installing Active Directory tools..."
 
 # Get script directory for copying tools
@@ -44,16 +31,12 @@ fi
 # Install base dependencies and tools available via apt
 apt-get update
 APT_PACKAGES=(
-    python3
-    python3-pip
     smbclient
-    wget
-    git
-    proxychains4
     python3-impacket
     evil-winrm
     responder
     krbrelayx
+    certipy-ad
 )
 
 if debug_confirm "Install APT packages: ${APT_PACKAGES[*]}"; then
@@ -69,9 +52,8 @@ fi
 
 # Install Python packages via pipx
 PIPX_PACKAGES=(
-    "impacket"
     "mitm6"
-    "certipy-ad"
+    "certipy-ad" # cant find
     "coercer"
     "bloodyAD"
     "netexec"
@@ -86,54 +68,6 @@ for pkg in "${PIPX_PACKAGES[@]}"; do
     fi
 done
 
-# Create necessary directories
-echo "Creating directories in /opt..."
-mkdir -p /opt/{ad-tools,ligolo-ng}
-
-# Install ligolo-ng
-if debug_confirm "Install ligolo-ng"; then
-    echo "Installing ligolo-ng..."
-    if [ -d "$SCRIPT_DIR/ligolo-ng" ]; then
-        # Copy ligolo-ng files
-        cp -r "$SCRIPT_DIR/ligolo-ng/"* /opt/ligolo-ng/
-        
-        # Create symbolic links for Linux binaries if they exist
-        if [ -f "/opt/ligolo-ng/linux/agent" ] && [ -f "/opt/ligolo-ng/linux/proxy" ]; then
-            chmod +x /opt/ligolo-ng/linux/{agent,proxy}
-            ln -sf /opt/ligolo-ng/linux/agent /usr/local/bin/ligolo-agent
-            ln -sf /opt/ligolo-ng/linux/proxy /usr/local/bin/ligolo-proxy
-        else
-            echo "Warning: ligolo-ng binaries not found in the tools directory"
-        fi
-    else
-        echo "Warning: ligolo-ng directory not found in $SCRIPT_DIR"
-    fi
-fi
-
-# Copy AD Tools
-if debug_confirm "Install AD tools and scripts"; then
-    echo "Installing AD tools..."
-    if [ -d "$SCRIPT_DIR/ad-tools" ]; then
-        # Copy AD tools
-        cp -r "$SCRIPT_DIR/ad-tools/"* /opt/ad-tools/
-        
-        # Verify PowerShell scripts
-        if [ -d "/opt/ad-tools/powershell" ]; then
-            echo "PowerShell scripts installed"
-        else
-            echo "Warning: PowerShell scripts not found in tools directory"
-        fi
-        
-        # Verify Windows binaries
-        if [ -d "/opt/ad-tools/binaries" ]; then
-            echo "Windows binaries installed"
-        else
-            echo "Warning: Windows binaries not found in tools directory"
-        fi
-    else
-        echo "Warning: ad-tools directory not found in $SCRIPT_DIR"
-    fi
-fi
 
 # Install Go-based tools
 if debug_confirm "Install Kerbrute"; then
@@ -145,9 +79,5 @@ if debug_confirm "Install Chisel"; then
     echo "Installing Chisel..."
     install_go_binary "github.com/jpillora/chisel" "chisel"
 fi
-
-# Set proper ownership
-chown -R "$ACTUAL_USER:$ACTUAL_USER" /opt/{ad-tools,ligolo-ng}
-echo "Set ownership of /opt directories to $ACTUAL_USER"
 
 echo "AD tools installation complete"

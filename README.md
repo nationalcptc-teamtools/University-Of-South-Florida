@@ -1,6 +1,6 @@
 ```
 git clone https://github.com/nationalcptc-teamtools/University-Of-South-Florida && cd University-Of-South-Florida
-chmod +x ./letsgo.sh && ./letsgo.sh
+chmod +x ./letsgo.sh && sudo ./letsgo.sh
 source ~/.zshrc
 ```
 

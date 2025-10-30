@@ -37,7 +37,7 @@ APT_PACKAGES=(
     python3-pip
     python3-venv
     vim
-t install -y --no-insta    tmux
+    tmux
     flameshot
 )
 

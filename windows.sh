@@ -39,7 +39,6 @@ fi
 # Install Python packages via pipx
 PIPX_PACKAGES=(
     "mitm6"
-    "certipy-ad" # cant find
     "coercer"
     "bloodyAD"
     "netexec"
@@ -54,16 +53,7 @@ for pkg in "${PIPX_PACKAGES[@]}"; do
     fi
 done
 
-
-# Install Go-based tools
-if debug_confirm "Install Kerbrute"; then
-    echo "Installing Kerbrute..."
-    install_go_binary "github.com/ropnop/kerbrute" "kerbrute"
-fi
-
-if debug_confirm "Install Chisel"; then
-    echo "Installing Chisel..."
-    install_go_binary "github.com/jpillora/chisel" "chisel"
-fi
+go install github.com/jpillora/chisel@latest
+go install github.com/ropnop/kerbrute@latest
 
 echo "AD tools installation complete"

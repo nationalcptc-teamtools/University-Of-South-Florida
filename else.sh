@@ -24,8 +24,6 @@ if ! command -v linpeas >/dev/null 2>&1; then
         mkdir -p /opt/linpeas
         wget -q -O /opt/linpeas/linpeas.sh \
             "https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh"
-        chmod +x /opt/linpeas/linpeas.sh
-        ln -sf /opt/linpeas/linpeas.sh /usr/local/bin/linpeas
     fi
 fi
 

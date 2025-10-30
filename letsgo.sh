@@ -117,10 +117,4 @@ if [[ -f "$ZSHRC" ]]; then
     source "$ZSHRC" || true
 fi
 
-source ~/.zshrc
-
-#Add go path to sudoers
-sed '/secure_path/ s|"$|:/usr/local/go/bin"|' /etc/sudoers | sudo EDITOR='tee' visudo -c -f - > /dev/null && \
-sed -i.bak '/secure_path/ s|"$|:/usr/local/go/bin"|' /etc/sudoers
-
 echo "All set :)"

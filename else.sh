@@ -35,7 +35,4 @@ go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
 go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
 CGO_ENABLED=1 go install github.com/projectdiscovery/katana/cmd/katana@latest
 go install github.com/hakluke/hakrawler@latest
-
-
-# https://commondatastorage.googleapis.com/chromium-browser-snapshots/Linux_x64/1529300/chrome-linux.zip
 go install github.com/sensepost/gowitness@latest
